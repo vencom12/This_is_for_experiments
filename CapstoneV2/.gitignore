@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+
+# Logs and Debug
+server_log.txt
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Workspace settings
+.vscode/
+
+# Project utilities
+extra_scripts/
+tmp_sort.js
+silent_server.vbs
+binary_copy.js
+copy_icons.js
+copy_pwa_icons.js
+pwa_setup.bat
+run_full_system.bat
+runner.js
+test_db.js
+test_get.js
+test_node.js
+test_reg.js
+test_security.js
+write_pngs.js

@@ -1,0 +1,859 @@
+:root {
+    /* Color Palette - Elegant & Modern */
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.5);
+    --secondary: #a855f7;
+    --accent: #ec4899;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --text-main: #f8fafc;
+    --text-dim: #94a3b8;
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --glass-blur: blur(12px);
+    
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', 'Inter', sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at top left, #1e1b4b, #0f172a);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: clip;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-glass);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    background-clip: content-box;
+}
+
+/* Glassmorphism Generic Class */
+.glass {
+    background: var(--bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 15px var(--primary-glow); }
+    50% { box-shadow: 0 0 30px var(--primary-glow); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton {
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.03) 25%, 
+        rgba(255, 255, 255, 0.08) 50%, 
+        rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+    height: 20px;
+    width: 100%;
+    display: inline-block;
+}
+
+.skeleton-circle { border-radius: 50%; width: 40px; height: 40px; }
+.skeleton-img { height: 180px; border-radius: 12px; }
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+
+.animate-fade {
+    animation: fadeIn var(--transition-slow) forwards;
+}
+
+/* Navigation / Sidebar Layout */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: clip;
+}
+
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    border-radius: 0;
+    background: rgba(15, 23, 42, 0.4);
+    border-right: 1px solid var(--border-glass);
+    z-index: 100;
+}
+
+.nav-links {
+    list-style: none;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-links li {
+    width: 100%;
+}
+
+.nav-links label, .nav-links a, .sidebar .nav-logo, .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 20px;
+    border-radius: 16px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.nav-links label:hover, .nav-links a:hover, .logout-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+    transform: translateX(5px);
+}
+
+.nav-links a {
+    color: var(--text-dim);
+}
+
+.nav-links .active, 
+#nav-shop:checked ~ .dashboard-container .sidebar label[for="nav-shop"],
+#nav-tracking:checked ~ .dashboard-container .sidebar label[for="nav-tracking"],
+#nav-favs:checked ~ .dashboard-container .sidebar label[for="nav-favs"],
+#nav-settings:checked ~ .dashboard-container .sidebar label[for="nav-settings"],
+#nav-overview:checked ~ .dashboard-container .sidebar label[for="nav-overview"],
+#nav-inventory:checked ~ .dashboard-container .sidebar label[for="nav-inventory"],
+#nav-production:checked ~ .dashboard-container .sidebar label[for="nav-production"],
+#nav-staffing:checked ~ .dashboard-container .sidebar label[for="nav-staffing"],
+#nav-analytics:checked ~ .dashboard-container .sidebar label[for="nav-analytics"],
+#nav-products:checked ~ .dashboard-container .sidebar label[for="nav-products"],
+#nav-history:checked ~ .dashboard-container .sidebar label[for="nav-history"],
+#nav-support:checked ~ .dashboard-container .sidebar label[for="nav-support"] {
+    background: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.sidebar i, .sidebar svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2px;
+}
+
+/* Profiles Section */
+.sidebar-profile {
+    margin-top: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid var(--border-glass);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.profile-role {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+}
+
+main {
+    flex-grow: 1;
+    height: 100vh;
+    overflow-y: auto;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.05), transparent);
+    display: flex;
+    flex-direction: column;
+}
+
+.right-panel {
+    width: 340px;
+    flex-shrink: 0;
+    height: 100vh; /* Fixed height for internal scroll */
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    border-radius: 0;
+}
+
+/* Responsive Adjustments — Tablet / Half-screen PC (769px – 1100px) */
+@media (max-width: 1100px) and (min-width: 769px) {
+    /* Sidebar collapses to a thin icon-only rail */
+    .sidebar {
+        width: 70px;
+        padding: 20px 8px;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .sidebar .nav-logo {
+        justify-content: center;
+        margin-bottom: 16px !important;
+    }
+
+    .sidebar .nav-logo span {
+        display: none; /* Hide "Stitch-Opt" text */
+    }
+
+    .nav-links label span,
+    .nav-links a span,
+    .logout-btn span {
+        display: none; /* Icon-only nav */
+    }
+
+    .nav-links label,
+    .nav-links a,
+    .logout-btn {
+        justify-content: center;
+        padding: 12px;
+        gap: 0;
+    }
+
+    .sidebar-profile {
+        display: none; /* Hide profile card in compact sidebar */
+    }
+
+    .logout-container {
+        margin-top: auto;
+    }
+
+    /* Right panel shrinks */
+    .right-panel {
+        width: 280px;
+    }
+
+    /* Main grows to fill remaining space */
+    main {
+        min-width: 0; /* Prevent flex overflow */
+    }
+
+    /* Reduce content padding */
+    .module-section {
+        padding: 28px 20px;
+    }
+
+    /* Tighter product grid */
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    /* Tighter stats grid */
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+    }
+
+    /* Content area stacks on narrower tablet */
+    .content-area {
+        grid-template-columns: 1fr;
+    }
+
+    /* Tables scroll horizontally if needed */
+    .table-container {
+        overflow-x: auto;
+    }
+}
+
+.logout-container {
+    margin-top: 20px;
+}
+
+/* View Switching Logic */
+.module-section {
+    display: none;
+    padding: 40px;
+    min-height: 100%;
+}
+
+#nav-shop:checked ~ .dashboard-container #section-shop,
+#nav-tracking:checked ~ .dashboard-container #section-tracking,
+#nav-favs:checked ~ .dashboard-container #section-favs,
+#nav-settings:checked ~ .dashboard-container #section-settings,
+#nav-overview:checked ~ .dashboard-container #section-overview,
+#nav-inventory:checked ~ .dashboard-container #section-inventory,
+#nav-production:checked ~ .dashboard-container #section-production,
+#nav-staffing:checked ~ .dashboard-container #section-staffing,
+#nav-analytics:checked ~ .dashboard-container #section-analytics,
+#nav-workbench:checked ~ .dashboard-container #section-workbench,
+#nav-status:checked ~ .dashboard-container #section-status,
+#nav-threads:checked ~ .dashboard-container #section-threads,
+#nav-products:checked ~ .dashboard-container #section-products,
+#nav-history:checked ~ .dashboard-container #section-history,
+#nav-support:checked ~ .dashboard-container #section-support {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Radio logic handled in section above with .active */
+
+input[name="nav-radio"] {
+    display: none;
+}
+
+/* Buttons */
+.btn {
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition-fast);
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #4f46e5;
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Product Grid Styles */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    transition: var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--primary-glow);
+}
+
+.product-card:active {
+    transform: translateY(-4px) scale(0.98);
+}
+
+.product-image {
+    height: 180px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.product-image::after {
+    content: 'STITCH PREVIEW';
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.product-details {
+    padding: 24px;
+}
+
+.product-details h3 {
+    font-size: 1.25rem;
+    margin-bottom: 4px;
+}
+
+.product-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Right Panel Styles (Order Queue & Basket) */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* Updated for internal sections */
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    border-radius: 0;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+}
+
+.panel-section {
+    padding: 32px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.order-item {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-glass);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-pending { background: #fbbf24; }
+.status-active { background: #10b981; }
+
+.basket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+/* Modal System */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal {
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    border: 1px solid var(--border-glass);
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.input-group input, .input-group select, .input-group textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    padding: 14px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.input-group input:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Global Sync Indicator */
+.sync-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-glass);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.sync-indicator.is-syncing {
+    opacity: 1;
+    transform: scale(1);
+    animation: pulse-sync 2s infinite ease-in-out;
+}
+
+@keyframes pulse-sync {
+    0%, 100% { 
+        box-shadow: 0 0 5px var(--primary-glow);
+        transform: scale(1);
+        color: var(--primary);
+    }
+    50% { 
+        box-shadow: 0 0 20px var(--primary-glow);
+        transform: scale(1.1);
+        color: var(--secondary);
+    }
+}
+
+.sync-indicator svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* --- Mobile Device UI Overhaul (Phase 5) --- */
+
+/* Responsive Grid Utilities */
+.responsive-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.responsive-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    min-width: 100%; /* Don't force 600px statically here if block display is used */
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure inner th/td have enough room */
+th, td {
+    min-width: 120px;
+}
+
+/* Core Mobile Breakpoint */
+@media (max-width: 768px) {
+    /* Fluid Grids */
+    .responsive-split-grid {
+        grid-template-columns: 1fr; /* Stack vertically on phones */
+    }
+
+    html, body {
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Transform Sidebar into Fixed Top Navbar */
+    .dashboard-container {
+        padding-top: 70px; /* Space for top nav bar */
+        display: block !important;
+        min-height: 100vh;
+        overflow: visible !important;
+    }
+
+    main, .right-panel {
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important; 
+        position: static !important;
+        display: block !important;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: auto;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        padding: 0;
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid var(--border-glass);
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        z-index: 9999;
+    }
+
+    .nav-logo, .sidebar-profile {
+        display: none !important; /* Hide branding and profile on main bottom nav */
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        margin: 0;
+        padding: 0;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+    }
+
+    .nav-links li {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logout-container {
+        margin-top: 0;
+        flex: 0 0 auto;
+    }
+
+    .nav-links label, .nav-links a, .logout-btn {
+        flex-direction: column;
+        padding: 5px;
+        gap: 4px;
+        border-radius: 12px;
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+        font-size: 0.7rem; /* Tiny text if any */
+    }
+
+    .nav-links span, .logout-btn span {
+        display: none; /* Hide text, icon only */
+    }
+    
+    .nav-links .active, 
+    #nav-shop:checked ~ .dashboard-container .sidebar label[for="nav-shop"],
+    #nav-tracking:checked ~ .dashboard-container .sidebar label[for="nav-tracking"],
+    #nav-favs:checked ~ .dashboard-container .sidebar label[for="nav-favs"],
+    #nav-settings:checked ~ .dashboard-container .sidebar label[for="nav-settings"],
+    #nav-overview:checked ~ .dashboard-container .sidebar label[for="nav-overview"],
+    #nav-inventory:checked ~ .dashboard-container .sidebar label[for="nav-inventory"],
+    #nav-production:checked ~ .dashboard-container .sidebar label[for="nav-production"],
+    #nav-staffing:checked ~ .dashboard-container .sidebar label[for="nav-staffing"],
+    #nav-analytics:checked ~ .dashboard-container .sidebar label[for="nav-analytics"],
+    #nav-products:checked ~ .dashboard-container .sidebar label[for="nav-products"],
+    #nav-history:checked ~ .dashboard-container .sidebar label[for="nav-history"],
+    #nav-support:checked ~ .dashboard-container .sidebar label[for="nav-support"] {
+        background: transparent !important;
+        box-shadow: none;
+        color: var(--primary) !important;
+    }
+    
+    /* Highlight the active icon with a glowing dot */
+    .nav-links .active::after,
+    #nav-shop:checked ~ .dashboard-container .sidebar label[for="nav-shop"]::after,
+    #nav-tracking:checked ~ .dashboard-container .sidebar label[for="nav-tracking"]::after,
+    #nav-favs:checked ~ .dashboard-container .sidebar label[for="nav-favs"]::after,
+    #nav-settings:checked ~ .dashboard-container .sidebar label[for="nav-settings"]::after,
+    #nav-overview:checked ~ .dashboard-container .sidebar label[for="nav-overview"]::after,
+    #nav-inventory:checked ~ .dashboard-container .sidebar label[for="nav-inventory"]::after,
+    #nav-production:checked ~ .dashboard-container .sidebar label[for="nav-production"]::after,
+    #nav-staffing:checked ~ .dashboard-container .sidebar label[for="nav-staffing"]::after,
+    #nav-analytics:checked ~ .dashboard-container .sidebar label[for="nav-analytics"]::after,
+    #nav-products:checked ~ .dashboard-container .sidebar label[for="nav-products"]::after,
+    #nav-history:checked ~ .dashboard-container .sidebar label[for="nav-history"]::after,
+    #nav-support:checked ~ .dashboard-container .sidebar label[for="nav-support"]::after {
+        content: '';
+        display: block;
+        width: 6px;
+        height: 6px;
+        background: var(--primary);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--primary);
+        position: absolute;
+        bottom: 5px;
+    }
+
+    /* Modals should fit screen */
+    .modal {
+        padding: 24px;
+        width: 95%;
+    }
+
+    .module-section {
+        padding: 20px 15px; /* Compact padding for mobile */
+    }
+
+    /* Mobile Drawer System */
+    .mobile-only {
+        display: flex !important;
+    }
+
+    #nav-drawer-toggle {
+        display: none;
+    }
+
+    .right-panel {
+        position: fixed !important;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 85% !important;
+        max-width: 400px;
+        z-index: 10000;
+        background: rgba(15, 23, 42, 0.9) !important;
+        backdrop-filter: blur(30px) !important;
+        -webkit-backdrop-filter: blur(30px) !important;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        border-left: 1px solid var(--border-glass);
+        box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+        display: flex !important; /* Force display since we are using transform */
+    }
+
+    #nav-drawer-toggle:checked ~ .dashboard-container .right-panel {
+        transform: translateX(0);
+    }
+
+    /* Dim the background when drawer is open */
+    #nav-drawer-toggle:checked ~ .dashboard-container main {
+        filter: blur(5px) brightness(0.5);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .drawer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border-glass);
+    }
+
+    .close-drawer {
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-dim);
+        transition: color 0.2s;
+    }
+
+    .close-drawer:hover {
+        color: white;
+    }
+
+    /* Cart Icon Badge */
+    .cart-icon-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: var(--accent);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #0f172a;
+        box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+    }
+}
+
+.mobile-only {
+    display: none;
+}

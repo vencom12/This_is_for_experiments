@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch-Opt | Create Client Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon.ico">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #a855f7;
+            --bg-deep: #0f1423;
+            --card-bg: #191f33;
+            --input-bg: #252d43;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px; /* Add padding for mobile/small screens */
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 500px;
+            padding: 60px 40px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            padding: 18px 24px;
+            border-radius: 18px;
+            color: white;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            background: #2a3451;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 18px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: var(--primary);
+            border-radius: 18px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            margin-top: 12px;
+        }
+
+        .auth-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        select option {
+            background: var(--card-bg);
+            color: white;
+        }
+    </style>
+</head>
+<body class="register-body">
+
+    <div class="auth-card">
+        <h1 class="brand-logo">Stitch-Opt</h1>
+        <p class="auth-subtitle">Join the Intelligent Embroidery Network</p>
+
+        <form id="register-form">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Choose a username" required>
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="name@company.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <div id="register-error" class="error-message">Registration failed. Try again.</div>
+
+            <button type="submit" class="btn btn-primary auth-btn">Secure Registration</button>
+        </form>
+        
+        <p style="margin-top: 24px; font-size: 0.9rem; color: var(--text-dim);">
+            Already have an account? <a href="index.html" style="color: var(--primary); text-decoration: none;">Sign In</a>
+        </p>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('register-error');
+            
+            errorEl.style.display = 'none';
+            
+            if (window.AuthManager) {
+                const result = await AuthManager.register(username, email, password);
+                if (result.success) {
+                    // Public registration always redirects to customer portal
+                    window.location.href = 'user.html';
+                } else {
+                    errorEl.innerText = result.message || "Registration failed. User may already exist.";
+                    errorEl.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

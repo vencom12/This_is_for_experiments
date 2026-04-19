@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch-Opt | Offline</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg-deep: #0f1423;
+            --card-bg: #191f33;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .offline-container {
+            max-width: 400px;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+        }
+
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+            color: var(--primary);
+            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.4));
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 20px; font-weight: 700; }
+        p { font-size: 1.1rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 40px; }
+
+        .retry-btn {
+            background: var(--primary);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .retry-btn:hover {
+            transform: scale(1.05);
+            background: #818cf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <svg class="offline-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.58 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01" />
+        </svg>
+        <h1>Lost Connection?</h1>
+        <p>Stitch-Opt requires an active network link for production intelligence. Check your sync and try again.</p>
+        <button class="retry-btn" onclick="window.location.reload()">Sync Again Now</button>
+    </div>
+</body>
+</html>

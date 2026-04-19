@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Stitch-Opt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon.ico">
+    <script src="app.js"></script>
+    <script>
+        // Security Guard: Check access before page render
+        if (!window.AuthManager || !window.AuthManager.checkAccess('admin')) {
+            // Stop execution if not authorized (redirect happens in checkAccess)
+            document.documentElement.style.display = 'none';
+        }
+    </script>
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .table-container {
+            padding: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-dim);
+            font-weight: 400;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .ai-chat-preview {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-bubble {
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            max-width: 85%;
+        }
+
+        .chat-ai {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-glass);
+            align-self: flex-start;
+        }
+
+        .chat-user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            display: block;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- View Navigation Radios -->
+    <input type="radio" name="nav-radio" id="nav-overview" checked>
+    <input type="radio" name="nav-radio" id="nav-inventory">
+    <input type="radio" name="nav-radio" id="nav-production">
+    <input type="radio" name="nav-radio" id="nav-staffing">
+    <input type="radio" name="nav-radio" id="nav-analytics">
+    <input type="radio" name="nav-radio" id="nav-history">
+
+    <div class="dashboard-container">
+        <aside class="sidebar glass">
+            <a href="index.html" class="nav-logo" style="margin-bottom: 30px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span style="font-size: 1.4rem; font-weight: 700; color: white;">Stitch-Opt</span>
+            </a>
+            <ul class="nav-links">
+                <li>
+                    <label for="nav-overview">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        <span>Overview</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-inventory">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
+                        <span>Inventory</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-production">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="m4.93 4.93 14.14 14.14"></path><path d="M2 12h20"></path><path d="m19.07 4.93-14.14 14.14"></path></svg>
+                        <span>Production</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-staffing">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span>Staffing</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-analytics">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        <span>Analytics</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-history">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-4 4"/></svg>
+                        <span>Order History</span>
+                    </label>
+                </li>
+            </ul>
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar">AD</div>
+                <div class="profile-info">
+                    <span class="profile-name">Admin User</span>
+                    <span class="profile-role">System Manager</span>
+                </div>
+            </div>
+
+            <div class="logout-container">
+                <a href="#" class="logout-btn" style="color: var(--accent);" onclick="AuthManager.logout()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <main>
+            <!-- Section: Overview -->
+            <section id="section-overview" class="module-section">
+                <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1 style="font-size: 2rem;">Admin Console</h1>
+                        <p style="color: var(--text-dim);">System health is optimal today.</p>
+                    </div>
+                    <div class="btn btn-primary">+ New Production Run</div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="stat-card glass">
+                        <span class="stat-label">Midnight Blue Thread</span>
+                        <span id="inv-midnight" class="stat-value">12 Cones</span>
+                    </div>
+                    <div class="stat-card glass">
+                        <span class="stat-label">Gold Metallic Thread</span>
+                        <span id="inv-gold" class="stat-value">45 Cones</span>
+                    </div>
+                    <div class="stat-card glass">
+                        <span class="stat-label">Revenue (MTD)</span>
+                        <span class="stat-value">$12.4k</span>
+                    </div>
+                </div>
+
+                <div class="content-area">
+                    <div class="table-container glass">
+                        <div class="table-header">
+                            <h3>Recent Embroidery Orders</h3>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <select id="admin-batch-status" class="glass" style="padding: 6px 12px; border-radius: 8px; color: var(--text-main); font-size: 0.85rem; background: rgba(255,255,255,0.05);">
+                                    <option value="">Batch Status Update</option>
+                                    <option value="Preparing Order">Preparing Order</option>
+                                    <option value="In Transit">In Transit</option>
+                                    <option value="Ready For Pick Up">Ready For Pick Up</option>
+                                    <option value="Order Delivered">Order Delivered</option>
+                                </select>
+                                <button id="admin-batch-update-btn" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Apply</button>
+                                <a href="#" style="color: var(--primary); font-size: 0.9rem; text-decoration: none; margin-left: 10px;">View All</a>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"><input type="checkbox" id="admin-select-all-orders"></th>
+                                    <th>Order ID</th>
+                                    <th>Client</th>
+                                    <th>Design</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-order-table-body">
+                                <!-- Orders will be injected here by app.js -->
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: var(--text-dim); padding: 40px;">Loading live production data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- AI-Driven Production Optimizer -->
+                    <div id="ai-production-advice" class="glass" style="margin-top: 24px; padding: 24px; border-left: 4px solid var(--primary); display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div style="width:10px; height:10px; border-radius:50%; background:var(--primary); box-shadow:0 0 10px var(--primary);"></div>
+                            <p style="font-size:0.9rem; color:var(--text-main); font-weight:500;">StitchMaster Optimization Tip:</p>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-dim); margin-top:8px; line-height:1.4;">Analyzing current production queue for peak productivity...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Inventory -->
+            <section id="section-inventory" class="module-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 2rem;">Product Management</h1>
+                    <button class="btn btn-primary" onclick="UI.toggleModal('create-product-modal')">+ Create New Design</button>
+                </div>
+                
+                <div id="product-list-container" class="task-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Products will be loaded here by app.js -->
+                    <div style="grid-column: 1/-1; text-align: center; color: var(--text-dim); padding: 40px;">Loading product catalog...</div>
+                </div>
+            </section>
+
+            <!-- Section: Production -->
+            <section id="section-production" class="module-section">
+                <h1 style="font-size: 2rem; margin-bottom: 24px;">Live Production</h1>
+                <div class="glass" style="padding: 40px; text-align: center; color: var(--text-dim);">
+                    <p>Detailed machine metrics and schedules.</p>
+                </div>
+            </section>
+
+            <!-- Section: Staff Management -->
+            <section id="section-staffing" class="module-section">
+                <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1 style="font-size: 2rem;">Staff Management</h1>
+                        <p style="color: var(--text-dim);">Manage administrative and production personnel access.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="UI.toggleModal('staff-modal')">+ Create Staff Account</button>
+                </header>
+
+                <div class="table-container glass">
+                    <div class="table-header">
+                        <h3>Active Personnel</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staff-table-body">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--text-dim); padding: 40px;">Fetching personnel data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section: Analytics -->
+            <section id="section-analytics" class="module-section">
+                <h1 style="font-size: 2rem; margin-bottom: 24px;">System Analytics</h1>
+                <div class="glass" style="padding: 40px; text-align: center; color: var(--text-dim);">
+                    <p>Comprehensive reports and revenue charts.</p>
+                </div>
+            </section>
+
+            <!-- Section: Order History -->
+            <section id="section-history" class="module-section">
+                <h1 style="font-size: 2rem; margin-bottom: 24px;">Order History</h1>
+                <div class="table-container glass">
+                    <div class="table-header">
+                        <h3>Completed & Canceled Orders</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Client</th>
+                                <th>Design</th>
+                                <th>Status</th>
+                                <th>Resolved Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-history-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-dim); padding: 40px;">No historical orders found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Floating AI Trigger -->
+    <label for="ai-toggle" class="ai-assistant-trigger">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white;"><path d="m12 8-9.04 9.06a2.82 2.82 0 1 0 3.98 3.98L16 12"></path><circle cx="17" cy="7" r="5"></circle></svg>
+    </label>
+
+    <!-- Full AI Panel Overlay -->
+    <div class="ai-assistant-panel glass">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>StitchMaster AI</h3>
+            <label for="ai-toggle" style="cursor: pointer; color: var(--text-dim);">✕</label>
+        </div>
+        <div id="ai-chat-messages" style="flex: 1; border: 1px solid var(--border-glass); border-radius: 12px; margin-bottom: 12px; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+            <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center; margin-top: 40px;">Hello Admin! How can I help you manage production today?</p>
+        </div>
+        <input type="text" id="ai-chat-input" placeholder="Type a command..." style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white; outline: none;">
+    </div>
+
+    <!-- Staff Creation/Edit Modal -->
+    <div id="staff-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content glass" style="width: 450px; padding: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h3>Create Staff Account</h3>
+                <span style="cursor: pointer; color: var(--text-dim);" onclick="UI.toggleModal('staff-modal')">✕</span>
+            </div>
+            <form id="create-staff-form" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="input-group">
+                    <label>Username</label>
+                    <input type="text" id="staff-username" placeholder="Full Name" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="staff-email" placeholder="staff@stitchopt.com" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="staff-password" placeholder="••••••••" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group">
+                    <label>Role</label>
+                    <select id="staff-role" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white; outline: none;">
+                        <option value="employee">Production Employee</option>
+                        <option value="admin">System Administrator</option>
+                        <option value="customer">External Client</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Establish Personnel Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create/Edit Product Modal -->
+    <div id="create-product-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal glass animate-fade" style="max-width: 600px; width: 90%; padding: 40px; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.5rem;">Create New Design</h2>
+                <span style="cursor: pointer; color: var(--text-dim);" onclick="UI.toggleModal('create-product-modal')">✕</span>
+            </div>
+            
+            <form id="create-product-form">
+                <div class="responsive-split-grid">
+                    <div class="input-group">
+                        <label>Design Name</label>
+                        <input type="text" id="product-name" placeholder="e.g. Vintage Rose" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                    </div>
+                    <div class="input-group">
+                        <label>Price ($)</label>
+                        <input type="number" id="product-price" step="0.01" placeholder="29.99" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Category / Tag</label>
+                    <input type="text" id="product-tag" placeholder="e.g. Floral, Sport, Premium" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Description</label>
+                    <textarea id="product-desc" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 12px; color: white; min-height: 80px;" placeholder="Brief details about the design..."></textarea>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label>Design Image</label>
+                    <input type="file" id="product-image-file" accept="image/*" style="padding: 10px; color: white;">
+                    <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">Recommended: Square image, max 1MB.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 30px; padding: 14px;">Publish to Catalog</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Order Modal -->
+    <div id="edit-order-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-content glass" style="width: 450px; padding: 40px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h3 id="edit-order-modal-title">Edit Order</h3>
+                <span style="cursor: pointer; color: var(--text-dim);" onclick="UI.toggleModal('edit-order-modal')">✕</span>
+            </div>
+            <form id="edit-order-form" style="display: flex; flex-direction: column; gap: 20px;">
+                <div class="input-group" style="display: none;">
+                    <label>Client</label>
+                    <input type="text" id="edit-order-client" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group" style="display: none;">
+                    <label>Design</label>
+                    <input type="text" id="edit-order-design" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <div class="input-group">
+                    <label>Status Requirement</label>
+                    <input type="hidden" id="edit-order-status">
+                    <div id="status-button-group" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                        <button type="button" class="status-btn btn" data-value="In Queue" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">In Queue</button>
+                        <button type="button" class="status-btn btn" data-value="Preparing Order" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">Preparing Order</button>
+                        <button type="button" class="status-btn btn" data-value="In Transit" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">In Transit</button>
+                        <button type="button" class="status-btn btn" data-value="Ready For Pick Up" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">Ready For Pick Up</button>
+                        <button type="button" class="status-btn btn" data-value="Order Delivered" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">Order Delivered</button>
+                        <button type="button" class="status-btn btn" data-value="Order Canceled" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: var(--text-dim); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem;">Order Canceled</button>
+                    </div>
+                </div>
+                <!-- Progress is automatically managed now, hidden from direct input but keeping structure -->
+                <div class="input-group" style="display: none;">
+                    <label>Progress (%)</label>
+                    <input type="number" id="edit-order-progress" min="0" max="100" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 8px; color: white;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Save Process Updates</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="global-sync-indicator" class="sync-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.2-4-4.5C17.1 6.5 14 4 10.5 4a7 7 0 0 0-6.8 5.4C2 10.1 1 12.2 1 14.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+    </div>
+</body>
+</html>

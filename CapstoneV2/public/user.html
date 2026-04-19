@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch-Opt Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/icon.ico">
+    <script src="app.js?v=1.1"></script>
+    
+    <script>
+        // Security Guard: Check access before page render
+        if (!window.AuthManager || !window.AuthManager.checkAccess('customer')) {
+            // Stop execution if not authorized
+            document.documentElement.style.display = 'none';
+        }
+    </script>
+</head>
+<body style="margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh;">
+
+    <!-- View Navigation -->
+    <input type="radio" name="nav-radio" id="nav-shop" checked>
+    <input type="radio" name="nav-radio" id="nav-tracking">
+    <input type="radio" name="nav-radio" id="nav-favs">
+    <input type="radio" name="nav-radio" id="nav-settings">
+    <input type="checkbox" id="nav-drawer-toggle">
+
+    <div class="dashboard-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar glass">
+            <a href="index.html" class="nav-logo" style="margin-bottom: 30px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span style="font-size: 1.4rem; font-weight: 700; color: white;">Stitch-Opt</span>
+            </a>
+            <ul class="nav-links">
+                <li>
+                    <label for="nav-shop">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7l-3 5H5l-3-5"/></svg>
+                        <span>Shop Designs</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-tracking">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        <span>Order Tracking</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-favs">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <span>My Favorites</span>
+                    </label>
+                </li>
+                <li>
+                    <label for="nav-settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Settings</span>
+                    </label>
+                </li>
+                <li class="mobile-only">
+                    <label for="nav-drawer-toggle" class="drawer-trigger">
+                        <div class="cart-icon-wrapper">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                            <span id="mobile-basket-count" class="badge">0</span>
+                        </div>
+                        <span>Cart</span>
+                    </label>
+                </li>
+            </ul>
+
+            <div class="sidebar-profile">
+                <div class="profile-avatar"></div>
+                <div class="profile-info">
+                    <span class="profile-name"></span>
+                </div>
+            </div>
+
+            <div class="logout-container">
+                <a href="#" class="logout-btn" style="color: var(--accent);" onclick="AuthManager.logout()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Module: Shop -->
+            <section id="section-shop" class="module-section">
+                <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Design Catalog</h1>
+                        <p style="color: var(--text-dim);">Select a professional design for your next project.</p>
+                    </div>
+                    <div class="glass" style="padding: 12px 24px; border-radius: 16px; display: flex; align-items: center; gap: 12px; flex: 1; max-width: 400px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-dim);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" placeholder="Search designs..." style="background: none; border: none; color: white; outline: none; width: 100%; font-size: 0.95rem;">
+                    </div>
+                </header>
+
+                <div class="product-grid">
+                    <!-- Products dynamically injected from database by app.js -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--text-dim);">
+                        <p>Accessing live design network...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module: Order Tracking -->
+            <section id="section-tracking" class="module-section">
+                <h1 style="font-size: 2.2rem; margin-bottom: 24px;">Order Tracking</h1>
+                <div class="glass" style="padding: 32px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                        <div>
+                            <h3 style="margin-bottom: 4px;">Order #ORD-NULL</h3>
+                            <p style="color: var(--text-dim); font-size: 0.9rem;">Initializing system...</p>
+                        </div>
+                        <span class="status-pill" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 6px 16px; border-radius: 20px; font-size: 0.85rem;">Standby</span>
+                    </div>
+                    <div style="height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; overflow: hidden; margin-bottom: 12px;">
+                        <div class="progress-inner" style="width: 5%; height: 100%; background: var(--primary); box-shadow: 0 0 10px var(--primary-glow);"></div>
+                    </div>
+                    <p style="text-align: right; color: var(--text-dim); font-size: 0.85rem;">5% Processed</p>
+                </div>
+                <div style="text-align: center; padding: 40px; color: var(--text-dim);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 16px; opacity: 0.3;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    <p>No other active shipments found.</p>
+                </div>
+            </section>
+
+            <!-- Module: My Favorites -->
+            <section id="section-favs" class="module-section">
+                <h1 style="font-size: 2.2rem; margin-bottom: 24px;">My Favorites</h1>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;">
+                    <div style="height: 300px; border: 2px dashed var(--border-glass); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--text-dim); text-align: center; padding: 20px;">
+                        <div>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; color: var(--accent);"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <p>You haven't favorited any designs yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module: Settings -->
+            <section id="section-settings" class="module-section">
+                <h1 style="font-size: 2.2rem; margin-bottom: 32px;">Settings</h1>
+                <div class="glass" style="padding: 32px; max-width: 600px;">
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; color: var(--text-dim); margin-bottom: 8px; font-size: 0.9rem;">Display Name</label>
+                        <input type="text" id="settings-username" value="John Doe" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 12px; color: white;">
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; color: var(--text-dim); margin-bottom: 8px; font-size: 0.9rem;">Email Address</label>
+                        <input type="email" id="settings-email" value="john.doe@example.com" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glass); padding: 12px; border-radius: 12px; color: white;">
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 32px;">
+                        <button id="settings-save-btn" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Right Panel: Order Queue & Basket -->
+        <aside class="right-panel glass">
+            <div class="drawer-header mobile-only">
+                <h3>Cart & Activity</h3>
+                <label for="nav-drawer-toggle" class="close-drawer">✕</label>
+            </div>
+            <!-- Shopping Basket -->
+            <div class="panel-section" style="border-bottom: 1px solid var(--border-glass); margin-bottom: 20px; padding-bottom: 20px;">
+                <div class="section-header">
+                    <h3>Your Basket</h3>
+                    <span id="basket-count" style="background: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem;">0 Items</span>
+                </div>
+                <div id="basket-items-list" class="basket-items" style="min-height: 100px; display: flex; flex-direction: column; justify-content: center; color: var(--text-dim); text-align: center; font-size: 0.9rem;">
+                    <div>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px; opacity: 0.5;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <p>Basket is empty</p>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem; margin-bottom: 16px;">
+                        <span>Total:</span>
+                        <span id="basket-total">$0.00</span>
+                    </div>
+                    <button id="checkout-btn" class="btn btn-primary checkout-btn" style="opacity: 0.5; pointer-events: none;">Checkout Now</button>
+                </div>
+            </div>
+
+            <!-- Order Queue -->
+            <div class="panel-section">
+                <div class="section-header">
+                    <h3>Order Queue</h3>
+                    <span style="color: var(--text-dim); font-size: 0.85rem;">Active Status</span>
+                </div>
+                <div id="order-queue-list" class="order-queue" style="min-height: 150px; display: flex; flex-direction: column; justify-content: center; color: var(--text-dim); text-align: center; font-size: 0.9rem;">
+                    <div>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px; opacity: 0.5;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        <p>No active orders</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="global-sync-indicator" class="sync-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.2-4-4.5C17.1 6.5 14 4 10.5 4a7 7 0 0 0-6.8 5.4C2 10.1 1 12.2 1 14.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+    </div>
+</body>
+</html>

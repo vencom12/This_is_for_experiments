@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stitch-Opt Intelligence | Secure Gateway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #a855f7;
+            --bg-deep: #0f1423;
+            --card-bg: #191f33;
+            --input-bg: #252d43;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        body {
+            background: var(--bg-deep);
+            color: var(--text-main);
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .login-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 900px;
+            padding: 60px 40px;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .shield-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            color: #7c3aed;
+            filter: drop-shadow(0 0 15px rgba(124, 58, 237, 0.4));
+        }
+
+        .brand-logo {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 50px;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1.5px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .portal-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 40px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-8px);
+            background: rgba(99, 102, 241, 0.05);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+
+        .portal-card .icon-label {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .portal-card:hover .icon-label {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .portal-card h3 { font-size: 1.25rem; margin-bottom: 10px; font-weight: 700; }
+        .portal-card p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.4; }
+
+        #login-form-container {
+            max-width: 420px;
+            margin: 0 auto;
+            display: none;
+            animation: slideIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group { text-align: left; margin-bottom: 24px; }
+        .input-group label { display: block; margin-bottom: 10px; color: var(--text-dim); font-size: 0.95rem; font-weight: 500; }
+        .input-group input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            padding: 18px 24px;
+            border-radius: 18px;
+            color: white;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: var(--primary);
+            border-radius: 18px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-link { display: block; margin-top: 25px; font-size: 0.95rem; color: var(--text-dim); text-decoration: none; cursor: pointer; }
+        .create-acc-footer { margin-top: 30px; padding-top: 25px; border-top: 1px solid var(--border); font-size: 1rem; color: var(--text-dim); }
+        .create-acc-footer a { color: var(--primary-light); text-decoration: none; font-weight: 700; margin-left: 8px; }
+
+        @media (max-width: 768px) {
+            .portal-grid { grid-template-columns: 1fr; }
+            .login-card { padding: 40px 24px; border-radius: 30px; }
+            .brand-logo { font-size: 2.2rem; margin-bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-wrapper animate-fade">
+        <div class="login-card">
+            
+            <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            
+            <h1 class="brand-logo" style="margin-bottom: 20px;">Stitch-Opt</h1>
+            <!-- Professional Install Button (Hidden by default, shown when ready) -->
+            <div id="install-button-container" style="margin-bottom: 40px; display: none;">
+                <button id="install-button" class="login-btn" style="background: rgba(168, 85, 247, 0.15); color: var(--accent); border: 1px solid rgba(168, 85, 247, 0.3); font-size: 0.9rem; padding: 12px 24px; width: auto; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Install Stitch-Opt App
+                </button>
+            </div>
+
+            <!-- Portal Selection Screen -->
+            <div id="portal-selection">
+                <div class="portal-grid">
+                    <div class="portal-card" onclick="selectRole('admin')">
+                        <div class="icon-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h3>Admin Console</h3>
+                        <p>System management & analytics</p>
+                    </div>
+
+                    <div class="portal-card" onclick="selectRole('employee')">
+                        <div class="icon-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <h3>Employee Terminal</h3>
+                        <p>Live production controls</p>
+                    </div>
+
+                    <div class="portal-card" onclick="selectRole('customer')">
+                        <div class="icon-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <h3>Customer Portal</h3>
+                        <p>Order tracking & designs</p>
+                    </div>
+                </div>
+
+                <div class="create-acc-footer">
+                    New to the network? <a href="register.html">Create Portal Account</a>
+                </div>
+            </div>
+
+            <!-- Unified Login Form (Hidden initially) -->
+            <div id="login-form-container">
+                <h2 id="login-heading" style="margin-bottom: 30px; font-size: 1.8rem; font-weight: 700;">Sign In</h2>
+                <form id="main-login-form">
+                    <div class="input-group">
+                        <label>Username / Email</label>
+                        <input type="text" id="login-email" placeholder="e.g. admin or user@stitchopt.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="login-pass" placeholder="••••••••" required>
+                    </div>
+                    <div id="login-error" style="color: #ef4444; font-size: 0.9rem; margin-bottom: 20px; display: none;"></div>
+                    <button type="submit" class="login-btn">Establish Secure Link</button>
+                    <span class="back-link" onclick="backToPortals()">← Go back to portal selection</span>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let selectedRole = '';
+        let deferredPrompt;
+
+        // --- PWA DIAGNOSTICS & SETUP ---
+        console.log('[PWA] Initialization starting...');
+        if ('serviceWorker' in navigator) {
+            // Register worker
+            navigator.serviceWorker.register('/sw.js').then(reg => {
+                console.log('[PWA] SW Registered Successfully.');
+                reg.onupdatefound = () => {
+                    const worker = reg.installing;
+                    worker.onstatechange = () => console.log('[PWA] SW State:', worker.state);
+                };
+            }).catch(err => console.error('[PWA] SW Error:', err));
+        }
+
+        // --- HIDE BUTTONS IF ALREADY INSTALLED ---
+        function checkInstallation() {
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+                console.log('[PWA] Detected Standalone Mode - Hiding Install UI');
+                const installBtn = document.getElementById('install-button-container');
+                if (installBtn) installBtn.style.display = 'none';
+            }
+        }
+        checkInstallation();
+
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('[PWA] Installation Successful');
+            const installBtn = document.getElementById('install-button-container');
+            if (installBtn) installBtn.style.display = 'none';
+        });
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('[PWA] !!! INSTALL SIGNAL RECEIVED !!!');
+            
+            // Show the install UI
+            const container = document.getElementById('install-button-container');
+            if (container) container.style.display = 'block';
+            
+            // Visual feedback that it's ready
+            const btn = document.getElementById('install-button');
+            if (btn) btn.style.border = '3px solid #5bff5b';
+        });
+
+        document.getElementById('install-button').addEventListener('click', (e) => {
+            if (!deferredPrompt) {
+                const swStatus = ('serviceWorker' in navigator) ? '✅ Supported' : '❌ Not Supported';
+                alert('Install System Not Ready Yet.\n\nDiagnostics:\n1. Browser Support: ' + swStatus + '\n2. Security Check: ✅ OK (localhost)\n3. PWA Signal: ⏳ Still Waiting...\n\nHINT: If this persists for 10 seconds, try a quick refresh of THIS page.');
+                return;
+            }
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    const installBtn = document.getElementById('install-button-container');
+                    if (installBtn) installBtn.style.display = 'none';
+                }
+                deferredPrompt = null;
+            });
+        });
+
+        function selectRole(role) {
+            selectedRole = role;
+            document.getElementById('portal-selection').style.display = 'none';
+            document.getElementById('login-form-container').style.display = 'block';
+            document.getElementById('login-heading').innerText = `${role.charAt(0).toUpperCase() + role.slice(1)} Access`;
+        }
+
+        function backToPortals() {
+            document.getElementById('portal-selection').style.display = 'block';
+            document.getElementById('login-form-container').style.display = 'none';
+            selectedRole = '';
+        }
+
+        document.getElementById('main-login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-pass').value;
+            const errorEl = document.getElementById('login-error');
+            errorEl.style.display = 'none';
+            
+            if (window.AuthManager) {
+                const result = await AuthManager.login(email, password);
+                if (result.success) {
+                    const actualRole = AuthManager.getUserRole();
+                    if (actualRole !== selectedRole) {
+                        AuthManager.logout();
+                        errorEl.innerText = `Access denied: You do not have permissions for the ${selectedRole} portal.`;
+                        errorEl.style.display = 'block';
+                    } else {
+                        const routes = { 'admin': 'admin.html', 'employee': 'employee.html', 'customer': 'user.html' };
+                        window.location.href = routes[actualRole] || 'index.html';
+                    }
+                } else {
+                    errorEl.innerText = result.message || "Access denied: Invalid credentials.";
+                    errorEl.style.display = 'block';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
